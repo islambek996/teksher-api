@@ -182,21 +182,18 @@
 
         scans.forEach(scan => {
 
-            const parsed = parseCode(scan.code);
-
             html += `
-        <tr>
-            <td>${parsed.gtin}</td>
-            <td>${parsed.serial}</td>
-            <td style="word-break:break-all">${parsed.crypto}</td>
-            <td>
-                <button onclick="deleteScan(${scan.id})">
-                    🗑 Удалить
-                </button>
-            </td>
-        </tr>
-        `;
-
+    <tr>
+        <td>${scan.gtin}</td>
+        <td>${scan.serial}</td>
+        <td style="word-break:break-all">${scan.crypto}</td>
+        <td>
+            <button onclick="deleteScan(${scan.id})">
+                🗑 Удалить
+            </button>
+        </td>
+    </tr>
+    `;
         });
 
         document.getElementById("tableBody").innerHTML = html;

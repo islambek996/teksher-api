@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import kg.teksher.api.dto.ParsedScan;
+import kg.teksher.api.util.Gs1Parser;
 
 @RestController
 @RequestMapping("/api/scans")
@@ -18,8 +20,13 @@ public class ScanController {
     private final ScanRepository repository;
 
     @GetMapping
-    public List<Scan> getAll() {
-        return repository.findAll();
+    public List<ParsedScan> getAll() {
+
+        return repository.findAll()
+                .stream()
+                .map(Gs1Parser::parse)
+                .toList();
+
     }
 
     @PostMapping
