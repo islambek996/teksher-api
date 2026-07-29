@@ -42,7 +42,7 @@ public class ScanController {
 
         StringBuilder csv = new StringBuilder();
 
-        csv.append("Код маркировки\r\n");
+        csv.append("\r\n");
 
         repository.findAll().forEach(scan -> {
             String code = scan.getCode();
