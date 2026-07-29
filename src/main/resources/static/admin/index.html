@@ -89,7 +89,9 @@
     <button onclick="deleteAll()">
         Очистить всё
     </button>
-
+    <button onclick="exportCsv()">
+        📥 Экспорт CSV
+    </button>
 </div>
 
 <table>
@@ -111,7 +113,11 @@
 </table>
 
 <script>
+    function exportCsv(){
 
+        window.location.href="/api/scans/export";
+
+    }
     async function loadScans() {
 
         const response = await fetch("/api/scans");
