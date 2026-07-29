@@ -125,37 +125,36 @@
 </table>
 
 <script>
-    console.log(scan.code);
-    console.log(scan.code.split(String.fromCharCode(29)));
+
     function parseCode(code) {
 
         const GS = String.fromCharCode(29);
+
+        // Убираем ведущий GS
+        if (code.startsWith(GS)) {
+            code = code.substring(1);
+        }
 
         let gtin = "";
         let serial = "";
         let crypto = "";
 
-        if (code.startsWith("01")) {
-            gtin = code.substring(2, 16);
+        const gtinMatch = code.match(/01(\d{14})/);
+
+        if (gtinMatch) {
+            gtin = gtinMatch[1];
         }
 
-        const serialStart = code.indexOf("21");
+        const serialMatch = code.match(/21([^\x1D]+)/);
 
-        if (serialStart !== -1) {
+        if (serialMatch) {
+            serial = serialMatch[1];
+        }
 
-            const start = serialStart + 2;
-            const end = code.indexOf(GS, start);
+        const cryptoMatch = code.match(/92(.+)$/);
 
-            if (end !== -1) {
-
-                serial = code.substring(start, end);
-
-                const cryptoStart = code.indexOf("92", end);
-
-                if (cryptoStart !== -1) {
-                    crypto = code.substring(cryptoStart + 2);
-                }
-            }
+        if (cryptoMatch) {
+            crypto = cryptoMatch[1];
         }
 
         return {
@@ -170,6 +169,8 @@
     }
 
     async function loadScans() {
+        console.log(scan.code);
+        console.log(scan.code.split(String.fromCharCode(29)));
 
         const response = await fetch("/api/scans");
 
