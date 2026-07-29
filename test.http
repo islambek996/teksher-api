@@ -1,0 +1,6 @@
+POST http://localhost:8080/api/scans
+Content-Type: application/json
+
+{
+  "code": "010460123456789021ABC123"
+}
