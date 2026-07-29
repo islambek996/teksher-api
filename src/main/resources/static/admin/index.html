@@ -30,21 +30,80 @@
         h1{
             color:#1565C0;
         }
+        .header{
+
+            background:#1565C0;
+            color:white;
+
+            padding:25px;
+
+            border-radius:10px;
+
+            margin-bottom:20px;
+
+        }
+        button{
+
+            background:#1565C0;
+
+            color:white;
+
+            border:none;
+
+            padding:10px 18px;
+
+            border-radius:5px;
+
+        }
+
+        button:hover{
+
+            background:#0D47A1;
+
+        }
     </style>
 
 </head>
 <body>
 
-<h1>Teksher Scanner Admin</h1>
+<div class="header">
 
+    <div>
+
+        <h1>📷Teksher Scanner</h1>
+
+        <p>Панель администратора</p>
+
+    </div>
+
+</div>
+<h3>
+
+    Всего сканов:
+    <span id="count">0</span>
+
+</h3>
 <button onclick="loadScans()">Обновить</button>
 
 <table>
+    <div style="margin:20px 0;">
+        <input
+                type="text"
+                id="search"
+                placeholder="Поиск по коду..."
+                onkeyup="filterTable()"
+                style="width:400px;padding:10px;font-size:16px;">
+    </div>
+    <button onclick="loadScans()">Обновить</button>
 
+    <button onclick="deleteAll()">
+        Очистить всё
+    </button>
     <thead>
     <tr>
         <th>ID</th>
         <th>Код маркировки</th>
+        <th>Действие</th>
     </tr>
     </thead>
 
@@ -56,31 +115,76 @@
 
 <script>
 
-    async function loadScans(){
+    async function loadScans() {
 
-        const response=await fetch("/api/scans");
+        const response = await fetch("/api/scans");
+        const scans = await response.json();
 
-        const scans=await response.json();
+        let html = "";
 
-        let html="";
+        scans.forEach(scan => {
 
-        scans.forEach(scan=>{
-
-            html+=`
+            html += `
         <tr>
             <td>${scan.id}</td>
             <td>${scan.code}</td>
+            <td>
+                <button onclick="deleteScan(${scan.id})">
+                    Удалить
+                </button>
+            </td>
         </tr>
         `;
 
         });
 
-        document.getElementById("tableBody").innerHTML=html;
+        document.getElementById("tableBody").innerHTML = html;
+    }
+    async function deleteAll(){
 
+        if(!confirm("Удалить все записи?"))
+            return;
+
+        await fetch("/api/scans",{
+            method:"DELETE"
+        });
+
+        loadScans();
+    }
+    async function deleteScan(id){
+
+        if(!confirm("Удалить запись?"))
+            return;
+
+        await fetch("/api/scans/" + id,{
+            method:"DELETE"
+        });
+
+        loadScans();
     }
 
     loadScans();
+    function filterTable(){
 
+        let value = document
+            .getElementById("search")
+            .value
+            .toLowerCase();
+
+        let rows = document.querySelectorAll("#tableBody tr");
+
+        rows.forEach(row=>{
+
+            let text = row.innerText.toLowerCase();
+
+            if(text.includes(value))
+                row.style.display="";
+            else
+                row.style.display="none";
+
+        });
+        const scans = await response.json();
+    }
 </script>
 
 </body>
