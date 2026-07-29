@@ -21,16 +21,26 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
+                                "/api/scans/**",
                                 "/swagger-ui/**",
+                                "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/h2-console/**"
                         ).permitAll()
+
                         .anyRequest().authenticated()
                 )
-                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+
+                .headers(headers ->
+                        headers.frameOptions(frame ->
+                                frame.disable()
+                        )
+                )
+
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
