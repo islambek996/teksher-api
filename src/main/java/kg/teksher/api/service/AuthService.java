@@ -4,15 +4,18 @@ import kg.teksher.api.dto.LoginRequest;
 import kg.teksher.api.dto.LoginResponse;
 import kg.teksher.api.entity.User;
 import kg.teksher.api.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
     private final UserRepository repository;
+    private final PasswordEncoder encoder;
 
-    public AuthService(UserRepository repository) {
+    public AuthService(UserRepository repository, PasswordEncoder encoder) {
         this.repository = repository;
+        this.encoder = encoder;
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -23,11 +26,10 @@ public class AuthService {
             return new LoginResponse(false, "Пользователь не найден");
         }
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
             return new LoginResponse(false, "Неверный пароль");
         }
 
         return new LoginResponse(true, "Успешный вход");
     }
-
 }

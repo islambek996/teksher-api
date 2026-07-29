@@ -5,12 +5,14 @@ import kg.teksher.api.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner init(UserRepository repository) {
+    CommandLineRunner init(UserRepository repository,
+                           PasswordEncoder encoder) {
 
         return args -> {
 
@@ -18,19 +20,14 @@ public class DataInitializer {
 
                 User admin = new User(
                         "admin",
-                        "admin123",
+                        encoder.encode("admin123"),
                         "Администратор",
                         "ADMIN"
                 );
 
                 repository.save(admin);
 
-                System.out.println("====================================");
-                System.out.println(" Администратор создан");
-                System.out.println(" Логин: admin");
-                System.out.println(" Пароль: admin123");
-                System.out.println("====================================");
-
+                System.out.println("Admin created");
             }
 
         };
