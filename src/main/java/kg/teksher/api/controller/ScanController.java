@@ -44,9 +44,15 @@ public class ScanController {
 
         csv.append("Код маркировки\r\n");
 
-        repository.findAll().forEach(scan ->
-                csv.append(scan.getCode()).append("\r\n")
-        );
+        repository.findAll().forEach(scan -> {
+            String code = scan.getCode();
+
+            if (code != null && !code.isEmpty() && code.charAt(0) == 29) {
+                code = code.substring(1);
+            }
+
+            csv.append(code).append("\r\n");
+        });
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
