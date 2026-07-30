@@ -9,10 +9,13 @@ public class Scan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String userId;
+
 
     @Column(nullable = false, length = 500)
     private String code;
+    @Column(nullable = false)
+    private String userId;
+
 
     public Scan() {
     }
@@ -31,5 +34,12 @@ public class Scan {
 
     public void setCode(String code) {
         this.code = code;
+    }
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
