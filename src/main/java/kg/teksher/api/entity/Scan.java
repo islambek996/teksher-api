@@ -9,6 +9,7 @@ public class Scan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String userId;
 
     @Column(nullable = false, length = 500)
     private String code;
